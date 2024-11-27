@@ -1,9 +1,11 @@
-
 <template>
   <div v-if="visible" class="dialog-overlay">
     <div class="dialog">
-      <h2>Node Information</h2>
-      <pre>{{ nodeData }}</pre>
+      <h2 class="header-title">Node: {{ nodeData.name }}</h2>
+      <div class="node-details">
+        <p><span class="bold-label">ID:</span> {{ nodeData.id }}</p>
+        <p><span class="bold-label">Label:</span> {{ nodeData.label }}</p>
+      </div>
       <button @click="close">Close</button>
     </div>
   </div>
@@ -40,5 +42,14 @@ export default {
   background: white;
   padding: 20px;
   border-radius: 8px;
+}
+.dialog {
+  color: grey;
+}
+.bold-label {
+  font-weight: bold;
+}
+.header-title {
+  color: black;
 }
 </style>
