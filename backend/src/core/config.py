@@ -16,7 +16,11 @@ def parse_cors(v: Any) -> list[str] | str:
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=str(Path(__file__).parents[3] / '.env'), env_ignore_empty=True, extra='ignore'
+        env_file=str(Path(__file__).parents[3] / '.env'),
+        env_file_encoding='utf-8',
+        case_sensitive=True,
+        env_ignore_empty=False,
+        extra='ignore',
     )
     PROJECT_NAME: str
     API_V1_STR: str = '/api/v1'
