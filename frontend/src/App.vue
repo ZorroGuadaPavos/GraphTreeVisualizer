@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import TreeDiagram from './components/TreeDiagram.vue';
 import TreeList from './components/TreeList.vue';
 
-const selectedTreeId = ref(''); // Changed from null to ''
+const selectedTreeId = ref('');
 
 function handleTreeSelect(treeId) {
   selectedTreeId.value = treeId;

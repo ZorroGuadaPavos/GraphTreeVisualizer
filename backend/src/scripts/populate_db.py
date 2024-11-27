@@ -1,4 +1,6 @@
+import json
 import logging
+import os
 
 from neomodel import config, db
 
@@ -10,47 +12,6 @@ logger = logging.getLogger('populate_db')
 
 config.DATABASE_URL = settings.DATABASE_URL
 
-JSON_DATA = {
-    'data': [
-        {'name': 'A', 'description': 'This is a description of A', 'parent': ''},
-        {'name': 'B', 'description': 'This is a description of B', 'parent': 'A'},
-        {'name': 'C', 'description': 'This is a description of C', 'parent': 'A'},
-        {'name': 'D', 'description': 'This is a description of D', 'parent': 'A'},
-        {'name': 'B-1', 'description': 'This is a description of B-1', 'parent': 'B'},
-        {'name': 'B-2', 'description': 'This is a description of B-2', 'parent': 'B'},
-        {'name': 'B-3', 'description': 'This is a description of B-3', 'parent': 'B'},
-    ]
-}
-
-JSON_DATA = {
-    'data': [
-        {'name': 'A', 'description': 'This is a description of A', 'parent': ''},
-        {'name': 'B', 'description': 'This is a description of B', 'parent': 'A'},
-        {'name': 'C', 'description': 'This is a description of C', 'parent': 'A'},
-        {'name': 'D', 'description': 'This is a description of D', 'parent': 'A'},
-        {'name': 'B-1', 'description': 'This is a description of B-1', 'parent': 'B'},
-        {'name': 'B-2', 'description': 'This is a description of B-2', 'parent': 'B'},
-        {'name': 'B-3', 'description': 'This is a description of B-3', 'parent': 'B'},
-        {'name': 'B-1-1', 'description': 'This is a description of B-1-1', 'parent': 'B-1'},
-        {'name': 'B-1-2', 'description': 'This is a description of B-1-2', 'parent': 'B-1'},
-        {'name': 'B-2-1', 'description': 'This is a description of B-2-1', 'parent': 'B-2'},
-        {'name': 'B-2-1-1', 'description': 'This is a description of B-2-1-1', 'parent': 'B-2-1'},
-        {'name': 'B-3-1', 'description': 'This is a description of B-3-1', 'parent': 'B-3'},
-        {'name': 'B-3-1-1', 'description': 'This is a description of B-3-1-1', 'parent': 'B-3-1'},
-        {'name': 'B-3-1-2', 'description': 'This is a description of B-3-1-2', 'parent': 'B-3-1'},
-        {'name': 'C-1', 'description': 'This is a description of C-1', 'parent': 'C'},
-        {'name': 'C-1-1', 'description': 'This is a description of C-1-1', 'parent': 'C-1'},
-        {'name': 'D-1', 'description': 'This is a description of D-1', 'parent': 'D'},
-        {'name': 'D-1-1', 'description': 'This is a description of D-1-1', 'parent': 'D-1'},
-        {'name': 'D-1-2', 'description': 'This is a description of D-1-2', 'parent': 'D-1'},
-        {'name': 'E', 'description': 'This is a description of E', 'parent': 'A'},
-        {'name': 'E-1', 'description': 'This is a description of E-1', 'parent': 'E'},
-        {'name': 'E-1-1', 'description': 'This is a description of E-1-1', 'parent': 'E-1'},
-        {'name': 'E-1-1-1', 'description': 'This is a description of E-1-1-1', 'parent': 'E-1-1'},
-        {'name': 'E-2', 'description': 'This is a description of E-2', 'parent': 'E'},
-    ]
-}
-
 
 def clear_database():
     """
@@ -59,12 +20,17 @@ def clear_database():
     db.cypher_query('MATCH (n) DETACH DELETE n')
 
 
-def populate_database():
+def load_json(json_path):
+    with open(json_path) as f:
+        return json.load(f)
+
+
+def populate_database(json_data):
     tree = Tree().save()
     logger.info(f'Created Graph with uid: {tree.uid}')
     nodes = {}
 
-    for item in JSON_DATA['data']:
+    for item in json_data['data']:
         node = Node(name=item['name'], description=item['description']).save()
         nodes[item['name']] = node.uid
         db.cypher_query(
@@ -79,7 +45,7 @@ def populate_database():
             {'tree_uid': tree.uid, 'node_uid': node.uid},
         )
 
-    for item in JSON_DATA['data']:
+    for item in json_data['data']:
         if item['parent']:
             parent_uid = nodes[item['parent']]
             child_uid = nodes[item['name']]
@@ -94,8 +60,21 @@ def populate_database():
             )
 
 
+def get_json_files(directory):
+    return [f for f in os.listdir(directory) if f.endswith('.json')]
+
+
+def process_json_files():
+    data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+    json_files = get_json_files(data_dir)
+    for json_file in json_files:
+        json_path = os.path.join(data_dir, json_file)
+        json_data = load_json(json_path)
+        populate_database(json_data)
+
+
 if __name__ == '__main__':
     logger.info('Clearing database...')
-    # clear_database()
-    populate_database()
+    clear_database()
+    process_json_files()
     logger.info('Database populated.')
