@@ -4,6 +4,7 @@ from collections.abc import Generator
 import pytest
 from fastapi.testclient import TestClient
 from neo4j import GraphDatabase
+from src.core.config import settings
 from src.main import app
 
 logger = logging.getLogger(__name__)
@@ -12,10 +13,9 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope='session')
 def db_connection():
     """Create a Neo4j database connection that can be used throughout the tests."""
-    uri = 'bolt://localhost:7687'
-    auth = ('neo4j', '1234')  # username, password
-
     try:
+        uri = f'bolt://{settings.NEO4J_HOST}:{settings.NEO4J_PORT}'
+        auth = (settings.NEO4J_USER, settings.NEO4J_PASSWORD)
         driver = GraphDatabase.driver(uri, auth=auth)
         driver.verify_connectivity()
         logger.info(f'Connected to Neo4j at {driver.get_server_info().address}')

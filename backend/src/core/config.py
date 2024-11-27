@@ -23,7 +23,16 @@ class Settings(BaseSettings):
     ENVIRONMENT: Literal['local', 'staging', 'production'] = 'local'
     BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = []
 
-    DATABASE_URL: str
+    # Neo4j connection parameters
+    NEO4J_HOST: str = 'localhost'
+    NEO4J_PORT: int = 7687
+    NEO4J_USER: str = 'neo4j'
+    NEO4J_PASSWORD: str = ''
+
+    @computed_field  # type: ignore[misc]
+    @property
+    def DATABASE_URL(self) -> str:
+        return f'bolt://{self.NEO4J_USER}:{self.NEO4J_PASSWORD}@{self.NEO4J_HOST}:{self.NEO4J_PORT}'
 
     @computed_field  # type: ignore[misc]
     @property
