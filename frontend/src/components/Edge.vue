@@ -2,7 +2,6 @@
   <path
     class="link"
     :d="path"
-    style="fill: none; stroke: #d1d1d1; stroke-width: 2px;"
   ></path>
 </template>
 
@@ -15,5 +14,9 @@ export default {
 </script>
 
 <style scoped>
-/* ...existing styles... */
+.link {
+  fill: none;
+  stroke: #d1d1d1;
+  stroke-width: 2px;
+}
 </style>

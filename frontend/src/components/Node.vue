@@ -7,12 +7,12 @@
       :y="-height / 2"
       rx="8"
       ry="8"
-      style="fill: #f7f7f7; stroke: #333; stroke-width: 1.5px;"
+      class="node-rect"
     ></rect>
     <text
       dy=".35em"
       text-anchor="middle"
-      style="font-size: 14px; fill: #333;"
+      class="node-text"
     >
       {{ data.name }}
     </text>
@@ -42,5 +42,19 @@ export default {
 </script>
 
 <style scoped>
-/* ...existing styles... */
+.node-rect {
+  fill: #4CAF50;
+  stroke: #333;
+  stroke-width: 1.5px;
+  cursor: pointer;
+}
+.node-rect:hover {
+  fill: #66BB6A;
+}
+
+.node-text {
+  font-size: 14px;
+  fill: #fff;
+  cursor: pointer;
+}
 </style>

@@ -1,4 +1,3 @@
-
 <template>
   <ul class="tree-list">
     <li v-for="id in treeIds" :key="id" @click="selectTree(id)">
@@ -49,6 +48,6 @@ export default {
   border-bottom: 1px solid #eee;
 }
 .tree-list li:hover {
-  background-color: #f0f0f0;
+  background-color: #525151;
 }
 </style>
