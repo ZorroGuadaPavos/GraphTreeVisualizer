@@ -3,7 +3,11 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class TreeNode(BaseModel):
+class TreePublic(BaseModel):
+    id: str
+    children: Optional[list['TreePublic']] = []
+
+
+class NodePublic(BaseModel):
     id: str
     label: str
-    children: Optional[list['TreeNode']] = []

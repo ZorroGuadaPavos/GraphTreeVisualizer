@@ -2,7 +2,8 @@ from neomodel import RelationshipFrom, RelationshipTo, StringProperty, Structure
 
 
 class Node(StructuredNode):
-    name = StringProperty(unique_index=True, required=True)
+    uid = UniqueIdProperty(unique=True)
+    name = StringProperty(required=True)
     description = StringProperty()
     parent = RelationshipFrom('Node', 'PARENT')
     children = RelationshipTo('Node', 'PARENT')

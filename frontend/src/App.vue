@@ -1,30 +1,42 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue';
+import TreeDiagram from './components/TreeDiagram.vue';
+import TreeList from './components/TreeList.vue';
+
+const selectedTreeId = ref(''); // Changed from null to ''
+
+function handleTreeSelect(treeId) {
+  selectedTreeId.value = treeId;
+}
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app-container">
+    <div class="tree-list-wrapper">
+      <TreeList @tree-select="handleTreeSelect"/>
+    </div>
+    <div class="tree-wrapper" v-if="selectedTreeId">
+      <TreeDiagram :treeId="selectedTreeId"/>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style>
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.tree-list-wrapper {
+  width: 100%;
+  border-right: 1px solid #ccc;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.tree-wrapper {
+  flex: 1;
+  display: flex;
+}
+html, body, #app {
+  height: 100%;
+  margin: 0;
 }
 </style>
