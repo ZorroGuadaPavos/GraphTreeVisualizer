@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     NEO4J_HOST: str = 'localhost'
     NEO4J_PORT: int = 7687
     NEO4J_USER: str = 'neo4j'
-    NEO4J_PASSWORD: str = ''
+    NEO4J_PASSWORD: str = 'fake_password'
 
     @computed_field  # type: ignore[misc]
     @property

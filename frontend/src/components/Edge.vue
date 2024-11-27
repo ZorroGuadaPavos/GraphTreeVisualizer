@@ -7,9 +7,9 @@
 
 <script>
 export default {
-  props: {
-    path: Object,
-  },
+	props: {
+		path: Object,
+	},
 };
 </script>
 

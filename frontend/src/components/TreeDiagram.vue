@@ -29,86 +29,82 @@
 
 <script>
 import * as d3 from "d3";
-import axios from "axios";
 import Node from "./Node.vue";
 import Edge from "./Edge.vue";
 import NodeDialog from "./NodeDialog.vue";
+import { TreesService } from "../client/services";
 
 export default {
-  props: {
-    treeId: {
-      type: String,
-      required: true,
-    },
-  },
-  components: {
-    Node,
-    Edge,
-    NodeDialog,
-  },
-  data() {
-    return {
-      series: {},
-      nodes: [],
-      links: [],
-      width: 800,
-      height: 800,
-      margin: { top: 25, right: 90, bottom: 30, left: 90 },
-      dialogVisible: false,
-      dialogData: null,
-    };
-  },
-  watch: {
-    treeId(newId) {
-      this.fetchTreeData();
-    },
-  },
-  mounted() {
-    this.fetchTreeData();
-  },
-  methods: {
-    fetchTreeData() {
-      const apiUrl = `http://127.0.0.1:8000/api/v1/trees/${this.treeId}`;
-      axios
-        .get(apiUrl)
-        .then((response) => {
-          this.series = response.data;
-          this.processTreeData();
-        })
-        .catch((error) => {
-          console.error("Error fetching tree data:", error);
-        });
-    },
-    processTreeData() {
-      const treemap = d3.tree().size([this.height, this.width]);
-      const root = d3.hierarchy(this.series);
-      const treeData = treemap(root);
-      this.nodes = treeData.descendants();
-      this.links = treeData.links();
-    },
-    generateLinkPath(link) {
-      return d3
-        .linkHorizontal()
-        .x((d) => d.y)
-        .y((d) => d.x)(link);
-    },
-    handleNodeClick({ nodeId }) {
-      const apiUrl = `http://127.0.0.1:8000/api/v1/trees/${this.treeId}/nodes/${nodeId}`;
-      axios
-        .get(apiUrl)
-        .then((response) => {
-          this.dialogData = response.data;
-          this.dialogVisible = true;
-        })
-        .catch((error) => {
-          console.error("Error fetching node data:", error);
-        });
-    },
-    closeDialog() {
-      this.dialogVisible = false;
-      this.dialogData = null;
-    },
-  },
+	props: {
+		treeId: {
+			type: String,
+			required: true,
+		},
+	},
+	components: {
+		Node,
+		Edge,
+		NodeDialog,
+	},
+	data() {
+		return {
+			series: {},
+			nodes: [],
+			links: [],
+			width: 800,
+			height: 800,
+			margin: { top: 25, right: 90, bottom: 30, left: 90 },
+			dialogVisible: false,
+			dialogData: null,
+		};
+	},
+	watch: {
+		treeId(newId) {
+			this.fetchTreeData();
+		},
+	},
+	mounted() {
+		this.fetchTreeData();
+	},
+	methods: {
+		fetchTreeData() {
+			TreesService.treesReadTree({ treeId: this.treeId })
+				.then((response) => {
+					this.series = response;
+					this.processTreeData();
+				})
+				.catch((error) => {
+					console.error("Error fetching tree data:", error);
+				});
+		},
+		processTreeData() {
+			const treemap = d3.tree().size([this.height, this.width]);
+			const root = d3.hierarchy(this.series);
+			const treeData = treemap(root);
+			this.nodes = treeData.descendants();
+			this.links = treeData.links();
+		},
+		generateLinkPath(link) {
+			return d3
+				.linkHorizontal()
+				.x((d) => d.y)
+				.y((d) => d.x)(link);
+		},
+		handleNodeClick({ nodeId }) {
+			TreesService.treesReadNode({ treeId: this.treeId, nodeId })
+				.then((response) => {
+					this.dialogData = response;
+					this.dialogVisible = true;
+				})
+				.catch((error) => {
+					console.error("Error fetching node data:", error);
+				});
+		},
+		closeDialog() {
+			this.dialogVisible = false;
+			this.dialogData = null;
+		},
+	},
 };
 </script>
 

@@ -13,6 +13,7 @@
 - **Frontend:**
     - [**Vue.js**](https://vuejs.org) with Vite for a modern frontend stack.
         - [D3.js](https://d3js.org) for interactive graph visualization.
+        - Generated client for consuming the backend API.
 - **Testing:**
     - [Pytest](https://pytest.org) for backend testing.
 

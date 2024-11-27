@@ -21,23 +21,23 @@
 
 <script>
 export default {
-  props: {
-    data: Object,
-    position: Object,
-    width: {
-      type: Number,
-      default: 80,
-    },
-    height: {
-      type: Number,
-      default: 30,
-    },
-  },
-  methods: {
-    handleClick() {
-      this.$emit('node-clicked', { nodeId: this.data.id });
-    },
-  },
+	props: {
+		data: Object,
+		position: Object,
+		width: {
+			type: Number,
+			default: 80,
+		},
+		height: {
+			type: Number,
+			default: 30,
+		},
+	},
+	methods: {
+		handleClick() {
+			this.$emit("node-clicked", { nodeId: this.data.id });
+		},
+	},
 };
 </script>
 

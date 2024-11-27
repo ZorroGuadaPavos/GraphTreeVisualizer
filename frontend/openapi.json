@@ -1,0 +1,233 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+	  "title": "Graph Tree",
+	  "version": "0.1.0"
+	},
+	"paths": {
+	  "/api/v1/trees/": {
+		"get": {
+		  "tags": [
+			"trees"
+		  ],
+		  "summary": "Get All Tree Ids",
+		  "operationId": "trees-get_all_tree_ids",
+		  "responses": {
+			"200": {
+			  "description": "Successful Response",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"items": {
+					  "type": "string"
+					},
+					"type": "array",
+					"title": "Response Trees-Get All Tree Ids"
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  },
+	  "/api/v1/trees/{tree_id}": {
+		"get": {
+		  "tags": [
+			"trees"
+		  ],
+		  "summary": "Read Tree",
+		  "operationId": "trees-read_tree",
+		  "parameters": [
+			{
+			  "name": "tree_id",
+			  "in": "path",
+			  "required": true,
+			  "schema": {
+				"type": "string",
+				"title": "Tree Id"
+			  }
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Successful Response",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"$ref": "#/components/schemas/TreePublic"
+				  }
+				}
+			  }
+			},
+			"422": {
+			  "description": "Validation Error",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"$ref": "#/components/schemas/HTTPValidationError"
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  },
+	  "/api/v1/trees/{tree_id}/nodes/{node_id}": {
+		"get": {
+		  "tags": [
+			"trees"
+		  ],
+		  "summary": "Read Node",
+		  "operationId": "trees-read_node",
+		  "parameters": [
+			{
+			  "name": "tree_id",
+			  "in": "path",
+			  "required": true,
+			  "schema": {
+				"type": "string",
+				"title": "Tree Id"
+			  }
+			},
+			{
+			  "name": "node_id",
+			  "in": "path",
+			  "required": true,
+			  "schema": {
+				"type": "string",
+				"title": "Node Id"
+			  }
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Successful Response",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"$ref": "#/components/schemas/NodePublic"
+				  }
+				}
+			  }
+			},
+			"422": {
+			  "description": "Validation Error",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"$ref": "#/components/schemas/HTTPValidationError"
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	},
+	"components": {
+	  "schemas": {
+		"HTTPValidationError": {
+		  "properties": {
+			"detail": {
+			  "items": {
+				"$ref": "#/components/schemas/ValidationError"
+			  },
+			  "type": "array",
+			  "title": "Detail"
+			}
+		  },
+		  "type": "object",
+		  "title": "HTTPValidationError"
+		},
+		"NodePublic": {
+		  "properties": {
+			"name": {
+			  "type": "string",
+			  "title": "Name"
+			},
+			"id": {
+			  "type": "string",
+			  "title": "Id"
+			},
+			"label": {
+			  "type": "string",
+			  "title": "Label"
+			}
+		  },
+		  "type": "object",
+		  "required": [
+			"name",
+			"id",
+			"label"
+		  ],
+		  "title": "NodePublic"
+		},
+		"TreePublic": {
+		  "properties": {
+			"name": {
+			  "type": "string",
+			  "title": "Name"
+			},
+			"id": {
+			  "type": "string",
+			  "title": "Id"
+			},
+			"children": {
+			  "anyOf": [
+				{
+				  "items": {
+					"$ref": "#/components/schemas/TreePublic"
+				  },
+				  "type": "array"
+				},
+				{
+				  "type": "null"
+				}
+			  ],
+			  "title": "Children",
+			  "default": []
+			}
+		  },
+		  "type": "object",
+		  "required": [
+			"name",
+			"id"
+		  ],
+		  "title": "TreePublic"
+		},
+		"ValidationError": {
+		  "properties": {
+			"loc": {
+			  "items": {
+				"anyOf": [
+				  {
+					"type": "string"
+				  },
+				  {
+					"type": "integer"
+				  }
+				]
+			  },
+			  "type": "array",
+			  "title": "Location"
+			},
+			"msg": {
+			  "type": "string",
+			  "title": "Message"
+			},
+			"type": {
+			  "type": "string",
+			  "title": "Error Type"
+			}
+		  },
+		  "type": "object",
+		  "required": [
+			"loc",
+			"msg",
+			"type"
+		  ],
+		  "title": "ValidationError"
+		}
+	  }
+	}
+  }

@@ -13,15 +13,15 @@
 
 <script>
 export default {
-  props: {
-    visible: Boolean,
-    nodeData: Object,
-  },
-  methods: {
-    close() {
-      this.$emit('close');
-    },
-  },
+	props: {
+		visible: Boolean,
+		nodeData: Object,
+	},
+	methods: {
+		close() {
+			this.$emit("close");
+		},
+	},
 };
 </script>
 

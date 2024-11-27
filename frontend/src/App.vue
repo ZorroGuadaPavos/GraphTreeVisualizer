@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import TreeDiagram from './components/TreeDiagram.vue';
-import TreeList from './components/TreeList.vue';
+import { ref } from "vue";
+import TreeDiagram from "./components/TreeDiagram.vue";
+import TreeList from "./components/TreeList.vue";
 
-const selectedTreeId = ref('');
+const selectedTreeId = ref("");
 
 function handleTreeSelect(treeId) {
-  selectedTreeId.value = treeId;
+	selectedTreeId.value = treeId;
 }
 </script>
 

@@ -6,15 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "biome format --write ./src",
+    "generate-client": "openapi-ts --input ./openapi.json --output ./src/client --client axios --exportSchemas true"
   },
   "dependencies": {
-    "vue": "^3.5.13",
     "axios": "^1.7.8",
-    "d3": "^7.9.0"
+    "d3": "^7.9.0",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.6.1",
     "@vitejs/plugin-vue": "^5.2.1",
-    "vite": "^6.0.1"
+    "vite": "^6.0.1",
+    "@hey-api/openapi-ts": "^0.34.1"
   }
 }
