@@ -12,3 +12,4 @@ class Node(StructuredNode):
 
 class Tree(StructuredNode):
     uid = UniqueIdProperty(unique=True)
+    nodes = RelationshipFrom('Node', 'BELONGS_TO')

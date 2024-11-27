@@ -18,8 +18,7 @@ def get_root_node(tree_id: str) -> Optional[Node]:
 
 def get_node(tree_id: str, node_id: str) -> Optional[Node]:
     query = """
-    MATCH (t:Tree {uid: $tree_id}),
-          (n:Node {uid: $node_id})
+    MATCH (n:Node {uid: $node_id})-[:BELONGS_TO]->(t:Tree {uid: $tree_id})
     RETURN n;
     """
     results, _ = db.cypher_query(query, {'tree_id': tree_id, 'node_id': node_id})
