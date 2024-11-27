@@ -27,4 +27,4 @@ def read_node(tree_id: str, node_id: str) -> Dict:
     node = services.get_node(str(tree_id), node_id)
     if not node:
         raise HTTPException(status_code=404, detail='Node not found')
-    return NodePublic(id=node.name, label=node.description)
+    return NodePublic(id=node.uid, name=node.name, label=node.description)

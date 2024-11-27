@@ -18,7 +18,8 @@ def get_root_node(tree_id: str) -> Optional[Node]:
 
 def get_node(tree_id: str, node_id: str) -> Optional[Node]:
     query = """
-    MATCH (n:Node {name: $node_id})-[:BELONGS_TO]->(t:Tree {uid: $tree_id})
+    MATCH (t:Tree {uid: $tree_id}),
+          (n:Node {uid: $node_id})
     RETURN n;
     """
     results, _ = db.cypher_query(query, {'tree_id': tree_id, 'node_id': node_id})
@@ -35,7 +36,7 @@ def get_all_tree_ids() -> List[str]:
 
 
 def build_tree(node: Node) -> TreePublic:
-    return TreePublic(id=node.name, children=[build_tree(child) for child in node.children])
+    return TreePublic(name=node.name, id=node.uid, children=[build_tree(child) for child in node.children])
 
 
 def get_tree_hierarchy(tree_id: str) -> TreePublic:

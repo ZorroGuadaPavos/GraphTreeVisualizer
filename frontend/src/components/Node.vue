@@ -1,5 +1,5 @@
 <template>
-  <g :transform="`translate(${position.y},${position.x})`">
+  <g :transform="`translate(${position.y},${position.x})`" @click="handleClick">
     <rect
       :width="width"
       :height="height"
@@ -14,7 +14,7 @@
       text-anchor="middle"
       style="font-size: 14px; fill: #333;"
     >
-      {{ data.id }}
+      {{ data.name }}
     </text>
   </g>
 </template>
@@ -31,6 +31,11 @@ export default {
     height: {
       type: Number,
       default: 30,
+    },
+  },
+  methods: {
+    handleClick() {
+      this.$emit('node-clicked', { nodeId: this.data.id });
     },
   },
 };

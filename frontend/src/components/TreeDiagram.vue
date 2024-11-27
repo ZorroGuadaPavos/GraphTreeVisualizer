@@ -15,9 +15,15 @@
           :key="index"
           :data="node.data"
           :position="{ x: node.x, y: node.y }"
+          @node-clicked="handleNodeClick"
         />
       </g>
     </svg>
+    <NodeDialog
+      :visible="dialogVisible"
+      :nodeData="dialogData"
+      @close="closeDialog"
+    />
   </div>
 </template>
 
@@ -26,6 +32,7 @@ import * as d3 from "d3";
 import axios from "axios";
 import Node from "./Node.vue";
 import Edge from "./Edge.vue";
+import NodeDialog from "./NodeDialog.vue";
 
 export default {
   props: {
@@ -37,6 +44,7 @@ export default {
   components: {
     Node,
     Edge,
+    NodeDialog,
   },
   data() {
     return {
@@ -46,6 +54,8 @@ export default {
       width: 800,
       height: 800,
       margin: { top: 25, right: 90, bottom: 30, left: 90 },
+      dialogVisible: false,
+      dialogData: null,
     };
   },
   watch: {
@@ -81,6 +91,22 @@ export default {
         .linkHorizontal()
         .x((d) => d.y)
         .y((d) => d.x)(link);
+    },
+    handleNodeClick({ nodeId }) {
+      const apiUrl = `http://127.0.0.1:8000/api/v1/trees/${this.treeId}/nodes/${nodeId}`;
+      axios
+        .get(apiUrl)
+        .then((response) => {
+          this.dialogData = response.data;
+          this.dialogVisible = true;
+        })
+        .catch((error) => {
+          console.error("Error fetching node data:", error);
+        });
+    },
+    closeDialog() {
+      this.dialogVisible = false;
+      this.dialogData = null;
     },
   },
 };
