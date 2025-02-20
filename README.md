@@ -1,25 +1,44 @@
 # GraphTreeVisualizer
 
-## Challenge
-[Read the challenge details](./challenge.md)
+A graph visualization tool that displays hierarchical data structures using Neo4j and Neomodel.
 
-## Technology Stack and Features
+<img src="preview.png" width="600" alt="Graph Tree Visualizer"/>
 
+## Features
+
+- Interactive node visualization with D3.js
+- Neo4j graph database integration via Neomodel
+  - Graph traversal and querying
+  - Relationship modeling
+  - Data validation
+- Hierarchical tree layout (left-to-right or top-to-bottom)
+- Node selection with detailed information display
+  - Clicking a node shows its details in a sidebar
+  - Node details include name and description
+  - Selected node remains highlighted
+  - Close button to deselect nodes
+- RESTful API for graph data management
+
+## Technology Stack
+
+- **Database:**
+    - [**Neo4j**](https://neo4j.com) - graph database
+    - [**Neomodel**](https://neomodel.readthedocs.io) - Neo4j Object Graph Mapper
+        - Node definitions
+        - Property validation
+        - Relationship handling
+        - Graph queries
 - **Backend:**
-    - [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
-        - [Neomodel](https://neomodel.readthedocs.io) for Neo4j database interactions.
-        - [Pydantic](https://docs.pydantic.dev) for data validation and settings management.
-        - [Neo4j](https://neo4j.com) as the graph database.
+    - [**FastAPI**](https://fastapi.tiangolo.com) - Python web framework
+        - [Pydantic](https://docs.pydantic.dev) - data validation
 - **Frontend:**
-    - [**Vue.js**](https://vuejs.org) with Vite for a modern frontend stack.
-        - [D3.js](https://d3js.org) for interactive graph visualization.
-        - Generated client for consuming the backend API.
+    - [**Vue.js**](https://vuejs.org) with Vite
+        - [D3.js](https://d3js.org) - graph visualization
+        - API client
 - **Testing:**
-    - [Pytest](https://pytest.org) for backend testing.
+    - [Pytest](https://pytest.org)
 
-Explore the API documentation at [http://localhost:8000/docs](http://localhost:8000/docs).
-
-<img src="image.png" width="600" alt="Graph Tree Visualizer"/>
+API documentation: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ## How to Run it!
 
@@ -29,16 +48,27 @@ docker-compose up -d
 ```
 Access the application at [http://localhost:3000](http://localhost:3000).
 
-### Backend
+### Backend Setup
 
+1. First, ensure Neo4j is running and accessible
+```bash
+# Set the Neo4j connection details in your .env file:
+NEO4J_BOLT_URL=bolt://localhost:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=your_password
 ```
-createdb <dbname>
-# Set the environment variables in the .env file
+
+2. Set up the Python environment
+```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-# Run ./prestart.sh to initiate the database loading the graph
+```
+
+3. Initialize the database and start the server
+```bash
+# Run prestart.sh to initialize the Neo4j database and load initial graph data
 ./prestart.sh 
 uvicorn src.main:app --reload
 ```
